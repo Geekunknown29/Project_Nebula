@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nebula Market - Trading Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet"> <!-- Sci-fi font -->
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif; /* Sci-fi font */
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
+            color: #00ffcc;
+            overflow: auto; /* Allow scrolling */
+            position: relative; 
+        }
+
+        /* Starfield Background */
+        .starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 1.5s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        header {
+            background-color: rgba(26, 26, 26, 0.9);
+            color: #00ffcc;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.7);
+            z-index: 1; /* Ensure header is above the starfield */
+        }
+
+        h1 {
+            font-size: 48px; /* Increased font size */
+            text-shadow: 0 0 20px #00ffcc, 0 0 30px #ff00ff; /* Glowing effect */
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        nav a {
+            color: #00ffcc;
+            text-decoration: none;
+            padding: 10px 20px;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        nav a:hover {
+            color: #ff00ff;
+            transform: scale(1.1);
+        }
+
+        .actions {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .actions button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #00ffcc;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: box-shadow 0.3s;
+        }
+
+        .actions button:hover {
+            box-shadow: 0 0 20px #00cc99;
+        }
+
+        .balance {
+            font-size: 16px;
+            color: #00ffcc;
+            background-color: #1a1a1a;
+            padding: 8px;
+            border-radius: 5px;
+            text-align: left;
+            margin-top: 10px;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+        }
+
+        main {
+            max-width: 1300px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #1a1a1a;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            display: grid;
+            grid-template-columns: 1fr 2fr; /* Two-column layout */
+            gap: 20px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            color: #00ffcc;
+            border-bottom: 3px solid #00ffcc;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        footer {
+            background-color: #1a1a1a;
+            color: #00ffcc;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+            box-shadow: 0 -2px 20px rgba(0, 255, 204, 0.5);
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 14px;
+        }
+        .chatbot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            background-color: rgba(26, 26, 26, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.7);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        .chatbot-header {
+            font-size: 18px;
+            color: #00ffcc;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 200px;
+            margin-bottom: 10px;
+            padding: 5px;
+            background-color: #1a1a1a;
+            border-radius: 5px;
+        }
+
+        .chatbot-input {
+            display: flex;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #00ffcc;
+            border-radius: 5px;
+            background-color: #1a1a1a;
+            color: #00ffcc;
+        }
+
+        .chatbot-input button {
+            padding: 10px;
+            background-color: #00ffcc;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .chatbot-input button:hover {
+            background-color: #00cc99;
+        }
+
+        .message {
+            margin: 5px 0;
+        }
+
+        .user-message {
+            color: #00cc99;
+            text-align: right;
+        }
+
+        .bot-message {
+            color: #ff4d4d;
+            text-align: left;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 2; /* Ensure modals are above other content */
+        }
+
+        .modal-content {
+            background-color: rgba(26, 26, 26, 0.95);
+            padding: 20px;
+            border: 2px solid #00ffcc;
+            border-radius: 10px;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.7);
+        }
+
+        .modal input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            border: 1px solid #00ffcc;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            background-color: #1a1a1a;
+            color: #00ffcc;
+        }
+
+        .modal button {
+            padding: 10px 20px;
+            background-color: #00ffcc;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .modal button:hover {
+            background-color: #00cc99;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 0;
+            right: 10px;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #00ffcc;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Trading chart styles */
+        .tradingview-iframe {
+            width: 900px; /* Increased width */
+            height: 600px; /* Fixed height */
+            border: none;
+        }
+
+        /* New buttons for Buy/Sell */
+        .trade-buttons {
+            display: flex;
+            justify-content: center; /* Center the buttons */
+            gap: 10px; /* Space between buttons */
+            margin-top: 10px; /* Space above buttons */
+        }
+
+        .trade-buttons button {
+            padding: 10px 15px; /* Smaller padding */
+            font-size: 16px; /* Smaller font size */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: box-shadow 0.3s;
+        }
+
+        .buy-button {
+            background-color: #00cc99;
+        }
+
+        .buy-button:hover {
+            box-shadow: 0 0 20px #00cc99;
+        }
+
+        .sell-button {
+            background-color: #ff4d4d;
+        }
+
+        .sell-button:hover {
+            box-shadow: 0 0 20px #ff4d4d;
+        }
+    </style>
+</head>
+<body>
+
+<div class="starfield">
+    <!-- Generate stars dynamically with JavaScript -->
+</div>
+
+<header>
+    <h1>NEBULA MARKET</h1>
+    <nav>
+        <a href="#">Trading Platform</a>
+        <a href="#">AI Analysis</a>
+    </nav>
+    <div class="actions">
+        <button onclick="openDepositModal()">Deposit</button>
+        <button onclick="openWithdrawModal()">Withdraw</button>
+    </div>
+    <div class="balance">
+        Available Balance: <span id="accountBalance">$1000</span>
+    </div>
+</header>
+
+<main>
+    <section>
+        <h2 class="section-title">Select Market</h2>
+        <select id="marketSelect" onchange="updateChart()">
+            <option value="EURUSD">EUR/USD</option>
+            <option value="GBPUSD">GBP/USD</option>
+            <option value="USDJPY">USD/JPY</option>
+            <option value="AUDUSD">AUD/USD</option>
+            <option value="USDCAD">USD/CAD</option>
+        </select>
+        <h2 class="section-title">Live Trading Chart</h2>
+        <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+            {
+                "width": "980",
+                "height": "610",
+                "symbol": "NASDAQ:AAPL",
+                "timezone": "Etc/UTC",
+                "theme": "dark",
+                "style": "1",
+                "locale": "en",
+                "withdateranges": true,
+                "range": "YTD",
+                "hide_side_toolbar": false,
+                "allow_symbol_change": true,
+                "details": true,
+                "hotlist": true,
+                "calendar": false,
+                "show_popup_button": true,
+                "popup_width": "1000",
+                "popup_height": "650",
+                "support_host": "https://www.tradingview.com"
+            }
+            </script>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section class="news-section">
+        <h2 class="news-title">Market News</h2>
+        <p>Latest updates on market trends and news.</p>
+        <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
+            {
+                "feedMode": "all_symbols",
+                "isTransparent": false,
+                "displayMode": "regular",
+                "width": 300,
+                "height": 690,
+                "colorTheme": "dark",
+                "locale": "en"
+            }
+            </script>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2024 Nebula Market | All Rights Reserved</p>
+    <p><a href="#" style="color: #00ffcc;">Terms of Service</a> | <a href="#" style="color: #00ffcc;">Privacy Policy</a></p>
+</footer>
+
+<div id="depositModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('depositModal')">&times;</span>
+        <h3>Deposit Funds</h3>
+        <input type="number" id="depositAmount" placeholder="Enter Deposit Amount" min="1">
+        <button onclick="depositFunds()">Deposit</button>
+    </div>
+</div>
+
+<div id="withdrawModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('withdrawModal')">&times;</span>
+        <h3>Withdraw Funds</h3>
+        <input type="number" id="withdrawAmount" placeholder="Enter Withdraw Amount" min="1">
+        <button onclick="withdrawFunds()">Withdraw</button>
+    </div>
+</div>
+
+<div id="tradeModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('tradeModal')">&times;</span>
+        <h3>Place a Trade</h3>
+        <p>Trade Type: <span id="tradeType"></span></p>
+        <input type="number" id="lotSize" placeholder="Enter Lot Size (0.01 to 1)" min="0.01" max="1" step="0.01">
+        <input type="number" id="leverage" placeholder="Enter Leverage (1:100 to 1:3000)" min="100" max="3000" step="100">
+        <input type="number" id="tp" placeholder="Enter Take Profit (Optional)">
+        <input type="number" id="sl" placeholder="Enter Stop Loss (Optional)">
+        <button onclick="placeTrade()">Place Trade</button>
+    </div>
+</div>
+
+<script>
+     let balance = 1000; // Initial balance for demo
+
+function openDepositModal() {
+    document.getElementById('depositModal').style.display = 'flex';
+}
+
+function openWithdrawModal() {
+    document.getElementById('withdrawModal').style.display = 'flex';
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+}
+
+// Deposit funds function
+function depositFunds() {
+    const depositAmount = parseFloat(document.getElementById('depositAmount').value);
+    if (isNaN(depositAmount) || depositAmount <= 0) {
+        alert('Please enter a valid deposit amount.');
+        return;
+    }
+    balance += depositAmount;
+    document.getElementById('accountBalance').textContent = '$' + balance.toFixed(2);
+    closeModal('depositModal');
+}
+
+// Withdraw funds function
+function withdrawFunds() {
+    const withdrawAmount = parseFloat(document.getElementById('withdrawAmount').value);
+    if (isNaN(withdrawAmount) || withdrawAmount <= 0 || withdrawAmount > balance) {
+        alert('Please enter a valid withdrawal amount.');
+        return;
+    }
+    balance -= withdrawAmount;
+    document.getElementById('accountBalance').textContent = '$' + balance.toFixed(2);
+    closeModal('withdrawModal');
+}
+
+// Open trade modal
+function openTradeModal(type) {
+    document.getElementById('tradeType').textContent = type.charAt(0).toUpperCase() + type.slice(1);
+    document.getElementById('tradeModal').style.display = 'flex';
+}
+
+// Place trade logic
+function placeTrade() {
+    const lotSize = parseFloat(document.getElementById('lotSize').value);
+    const leverage = parseInt(document.getElementById('leverage').value);
+    const tp = parseFloat(document.getElementById('tp').value);
+    const sl = parseFloat(document.getElementById('sl').value);
+
+    if (isNaN(lotSize) || lotSize < 0.01 || lotSize > 1) {
+        alert('Please enter a valid lot size between 0.01 and 1.');
+        return;
+    }
+
+    if (isNaN(leverage) || leverage < 100 || leverage > 3000) {
+        alert('Please enter a valid leverage between 1:100 and 1:3000.');
+        return;
+    }
+
+    alert(Trade placed! ${document.getElementById('tradeType').textContent} trade with Lot Size: ${lotSize}, Leverage: ${leverage}, TP: ${tp}, SL: ${sl});
+    closeModal('tradeModal');
+}
+
+    function updateChart() {
+        const selectedMarket = document.getElementById('marketSelect').value;
+        const chartIframe = document.getElementById('tradingChart');
+        
+        const chartURL = `https://s.tradingview.com/widgetembed/?frameElementId=tradingview_12345&symbol=FX:${selectedMarket}&interval=1`;
+        chartIframe.src = chartURL;
+    }
+    <script>
+    // Existing JavaScript functions remain the same
+
+    // Chatbot functionality
+    function sendMessage() {
+        const userInput = document.getElementById('userInput').value;
+        if (userInput.trim() === '') return;
+
+        // Display user message
+        displayMessage(userInput, 'user-message');
+
+        // Simulate bot response
+        const botResponse = getBotResponse(userInput);
+        displayMessage(botResponse, 'bot-message');
+
+        // Clear input
+        document.getElementById('userInput').value = '';
+    }
+
+    function displayMessage(message, className) {
+        const messageElement = document.createElement('div');
+        messageElement.className = `message ${className}`;
+        messageElement.textContent = message;
+        document.getElementById('chatbotMessages').appendChild(messageElement);
+        // Scroll to the bottom of the chat
+        const messagesContainer = document.getElementById('chatbotMessages');
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function getBotResponse(input) {
+        const lowerInput = input.toLowerCase();
+        if (lowerInput.includes('buy') || lowerInput.includes('suggest')) {
+            return "I suggest you consider buying stocks like Apple (AAPL) or Tesla (TSLA) today for potential profit.";
+        } else if (lowerInput.includes('profit')) {
+            return "To maximize profit, diversify your portfolio and consider stocks with strong fundamentals.";
+        } else if (lowerInput.includes('which stock')) {
+            return "Based on current trends, stocks like Microsoft (MSFT) and Amazon (AMZN) are worth looking into.";
+        } else {
+            return "I'm here to help! Please ask about specific stocks or trading strategies.";
+        }
+    }
+</script>
+    
+</script>
+</body>
+</html>
