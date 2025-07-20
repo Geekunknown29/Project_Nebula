@@ -1,10 +1,7 @@
 # Project_Nebula
 
-Nebula Market all resources and files
+project Nebula Market all resources and files for hackathon : Code For Bharat s2 .
 
-link 1 (html and frontend) : https://github.com/NEBUMARK001/nebulamarket
-
-link 2 (logics and backend) : https://github.com/NEBUMARK001/NEBULA-MARKET-NEW-
 
 final website link : https://nebulamarket.rf.gd/?fbclid=PAZXh0bgNhZW0CMTEAAac4HzXaTalahNoc6pp5hFKvHsklbve-CcKNy1lMTseIIo3tWLy8OXU-bRc8Uw_aem_jadP4QiNIVVCJYzHlckokg&i=1
 
@@ -34,4 +31,5 @@ Whether you’re someone who has never bought a single stock before or an experi
 
 #Contact Us :
 
-Have questions, ideas, or just want to say hi? Reach out to us at myselfarpit.gupta@gmail.com or create an issue here on GitHub. We’d be happy to connect!
+Have questions, ideas, or just want to say hi? 
+Reach out to us at myselfarpit.gupta@gmail.com or create an issue here on GitHub. We’d be happy to connect!
